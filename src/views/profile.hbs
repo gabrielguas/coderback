@@ -1,0 +1,12 @@
+<div>
+    <h1>Tu perfil!</h1>
+    {{#if user}}
+        <p>{{user.name}}</p>
+        <p>{{user.email}}</p>
+        <p>{{user.age}}</p>
+        <p>{{user.rol}}</p>
+    {{else}}
+        <p>No estás logueado</p>
+        <a href="/users/login">Iniciar sesión</a>
+    {{/if}}
+</div>
