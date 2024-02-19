@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import { configEnv } from "../config/config.js";
 
-dotenv.config();
+const { DB_USER, DB_PASS, DB_CLUSTER, DB_NAME } = configEnv;
 
-const { MONGODB_URI } = process.env;
+const MONGODB_URI = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_CLUSTER}/${DB_NAME}?retryWrites=true&w=majority`;
 
 const mongoDBConnection = async () => {
   try {

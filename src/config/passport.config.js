@@ -3,7 +3,9 @@ import passportLocal from "passport-local";
 import userModel from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
+import { configEnv } from "../config/config.js"
 
+const { GITHUB_CLIENT_ID, GITHUB_SECRET,GITHUB_CALLBACK_URL } = configEnv;
 // Declaro la estrategia
 const localStrategy = passportLocal.Strategy;
 
@@ -85,9 +87,9 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: "Iv1.fa8d8469e3cb5a04",
-        clientSecret: "c9db6fdd47b626e6d8a602642b4a5728349325cc",
-        callbackUrl: "http://localhost:8080/api/session/githubcallback",
+        clientID: GITHUB_CLIENT_ID,
+        clientSecret: GITHUB_SECRET,
+        callbackUrl: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         // console.log("Profile obtenido del usuario de GitHub: ");

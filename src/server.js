@@ -13,7 +13,7 @@ import initializePassport from "./config/passport.config.js";
 import session from "express-session";
 import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
-
+import { configEnv } from "./config/config.js";
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -56,7 +56,7 @@ app.use(
 
     // Usando connect-mongo
     store: MongoStore.create({
-      mongoUrl: `mongodb+srv://guasgabriel22:FanoQ6mSsi7a1iwu@curso-backend-ch.j0ycecz.mongodb.net/entregaDB?retryWrites=true&w=majority`,
+      mongoUrl: `mongodb+srv://${configEnv.DB_USER}:${configEnv.DB_PASS}@${configEnv.DB_CLUSTER}/${configEnv.DB_NAME}?retryWrites=true&w=majority`,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 10 * 60,
     }),
@@ -80,8 +80,8 @@ app.use("/github", githubLoginViewRouter);
 app.use("/api/session", sessionRouter);
 
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+app.listen(configEnv.PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${configEnv.PORT}`);
 });
 
 mongoDBConnection();
