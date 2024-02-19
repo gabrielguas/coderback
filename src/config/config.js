@@ -13,7 +13,6 @@ dotenv.config({
 export const configEnv = {
   URL: process.env.URL,
   PORT: process.env.PORT,
-  JWT_SECRET: process.env.JWT_SECRET,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
   DB_USER: process.env.DB_USER,
   DB_PASS: process.env.DB_PASS,

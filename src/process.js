@@ -5,7 +5,7 @@ const program = new Command();
 program
   .option("-d", "Varaible para debug", false)
   .option("-p <port>", "Puerto del servidor", 9090)
-  .option("--mode <mode>", "Modo de trabajo: development o production", "development")
+  .option("--mode <mode>", "Modo de trabajo: development o production", "development", "production")
   .requiredOption(
     "-u <user>",
     "Usuario que va a utilizar el aplicativo.",
@@ -21,6 +21,8 @@ if (options.mode === 'development') {
 } else if (options.mode === 'production') {
   console.log('Ejecutando en modo "production"');
 }
+console.log("Modo Options: ", program.opts().mode);
+console.log("Remaining arguments: ", program.args);
 
 process.on("exit", (code) => {
   console.log("Este codigo se ejecuta antes de salir del proceso.");
