@@ -5,7 +5,7 @@ const program = new Command();
 program
   .option("-d", "Varaible para debug", false)
   .option("-p <port>", "Puerto del servidor", 9090)
-  .option("--mode <mode>", "Modo de trabajo: development o production", "development") // Cambiado para aceptar "development" o "production"
+  .option("--mode <mode>", "Modo de trabajo: development o production", "development")
   .requiredOption(
     "-u <user>",
     "Usuario que va a utilizar el aplicativo.",

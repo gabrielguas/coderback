@@ -15,7 +15,6 @@ import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import { configEnv } from "./config/config.js";
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 //JSON settings
 app.use(express.json());
@@ -60,7 +59,7 @@ app.use(
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 10 * 60,
     }),
-    secret: "coderS3cr3t",
+    secret: configEnv.COOKIE_SECRET,
     resave: false, // guarda en memoria, no es necesario porque va a estar en un archivo
     saveUninitialized: true, // lo guarda al crear la session
   })
