@@ -11,10 +11,12 @@
       {{#if user.rol}}
         <p>Rol: {{user.rol}}</p>
       {{/if}}
+      <p>ID: {{user._id}}</p>
       <form action="/api/session/logout">
         <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
       </form>
     </div>
+    <a href="/users/{{user._id}}/cart" class="btn btn-primary">Ir al carrito</a> <!-- Botón para ir al carrito -->
   {{else}}
     <div class="user-info mb-4">
       <h3>Bienvenido</h3>
@@ -31,7 +33,7 @@
         <p class="card-text">{{description}}</p>
         <p class="card-text">Precio: ${{price}}</p>
         <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
-        <button onclick="agregarAlCarrito('{{_id}}')" class="btn btn-success">Agregar al carrito</button>
+        <button onclick="agregarAlCarrito('{{_id}}', {{userId}})" class="btn btn-success">Agregar al carrito</button>
       </div>
     </div>
   {{/each}}
@@ -46,9 +48,9 @@
 </div>
 
 <script>
-  async function agregarAlCarrito(productId) {
+  async function agregarAlCarrito(productId, userId) {
     try {
-      const response = await fetch(`/api/carts/658eccc66fa5da2b93311bd2/products/${productId}`, {
+      const response = await fetch(`/api/cart/${userId}/products/${productId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

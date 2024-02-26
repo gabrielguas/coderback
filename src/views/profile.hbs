@@ -5,6 +5,9 @@
         <p>{{user.email}}</p>
         <p>{{user.age}}</p>
         <p>{{user.rol}}</p>
+        {{#if cart}}
+            <p>Cantidad de elementos en el carrito: {{cart.totalProducts}}</p>
+        {{/if}}
     {{else}}
         <p>No estás logueado</p>
         <a href="/users/login">Iniciar sesión</a>

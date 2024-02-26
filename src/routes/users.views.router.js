@@ -7,5 +7,5 @@ const router = express.Router();
 router.get('/login', userController.showLoginPage);
 router.get('/register', userController.showRegisterPage);
 router.get('/', userController.showProfilePage);
-
+router.get('/:userId/cart', userController.showCartPage);
 export default router;
