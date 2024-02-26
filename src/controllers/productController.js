@@ -1,12 +1,12 @@
-// productController.js
+import ProductRepository from "../repositories/productRepository.js"
 
-import productDao from "../Dao/DBManager/product.dao.js";
+const productRepository = new ProductRepository();
 
 const productController = {
   getAllProducts: async (req, res) => {
     try {
-      const products = await productDao.getAllProducts(req);
-      return products
+      const products = await productRepository.getAllProducts();
+      return (products)
     } catch (error) {
       console.error("Error al obtener todos los productos:", error);
       res.status(500).json({ error: "Error al obtener productos" });
@@ -16,7 +16,7 @@ const productController = {
   createProduct: async (req, res) => {
     try {
       const product = req.body;
-      const createdProduct = await productDao.createProduct(product);
+      const createdProduct = await productRepository.createProduct(product);
       console.log("Producto creado con éxito:", createdProduct);
       console.log("Datos del producto:", product);
       res.status(201).json(createdProduct);
@@ -29,11 +29,12 @@ const productController = {
   getProductById: async (req, res) => {
     const { ID } = req.params;
     try {
-      const product = await productDao.getProductById(ID);
+      const product = await productRepository.getProductById(ID);
       res.json(product);
     } catch (error) {
       console.log("Error al buscar el producto por ID");
       console.log(error);
+      res.status(500).json({ error: "Error al buscar el producto por ID" });
     }
   },
 
@@ -42,7 +43,7 @@ const productController = {
     const data = req.body;
 
     try {
-      const product = await productDao.updateProduct(ID, data);
+      const product = await productRepository.updateProduct(ID, data);
       if (product) {
         res.json({
           message: "Producto actualizado con exito",
@@ -54,24 +55,27 @@ const productController = {
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: "Error al actualizar el producto" });
     }
   },
 
   deleteProduct: async (req, res) => {
     const { ID } = req.params;
     try {
-      const product = await productDao.deleteProduct(ID);
+      const product = await productRepository.deleteProduct(ID);
       if (product) {
         res.json({
           message: "Producto eliminado con exito",
         });
       } else {
-        res.json({
-          message: "No se encontro en producto en la base de datos",
+        res.status(404).json({
+          message: "No se encontró el producto en la base de datos",
         });
       }
     } catch (error) {
       console.log("Error al eliminar el producto");
+      console.log(error);
+      res.status(500).json({ error: "Error al eliminar el producto" });
     }
   },
 
@@ -79,7 +83,7 @@ const productController = {
     const { ID } = req.params;
 
     try {
-      const product = await productDao.getProductById(ID);
+      const product = await productRepository.getProductById(ID);
       res.json(product);
     } catch (error) {
       console.log("Error al buscar el producto por ID");

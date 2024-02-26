@@ -1,15 +1,16 @@
 import passport from "passport";
 import passportLocal from "passport-local";
-import userModel from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 import { configEnv } from "../config/config.js"
+import UserRepository from "../repositories/userRepository.js";
 
 const { GITHUB_CLIENT_ID, GITHUB_SECRET,GITHUB_CALLBACK_URL } = configEnv;
 // Declaro la estrategia
 const localStrategy = passportLocal.Strategy;
 
 const initializePassport = () => {
+  const userRepo = new UserRepository();
   //Register
   passport.use(
     "register",
@@ -18,13 +19,13 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         const { first_name, last_name, email, age, rol } = req.body;
         try {
-          const exist = await userModel.findOne({ email });
+          const exist = await userRepo.getUserByEmail(email);
           if (exist) {
             console.log("Ya hay un usuario registrado con ese email");
             done(null, false);
           }
 
-          const result = await userModel.create({
+          const result = await userRepo.createUser({
             first_name,
             last_name,
             email,
@@ -51,7 +52,7 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
         try {
-          const user = await userModel.findOne({ email: username });
+          const user = await userRepo.getUserByEmail(username);
           if (!user) {
             console.warn("El usuario no existe");
             return done(null, false);
@@ -75,7 +76,7 @@ const initializePassport = () => {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      let user = await userModel.findById(id);
+      let user = await userRepo.getUserById(id);
       done(null, user);
     } catch (error) {
       console.error("Error desserialiazndo al usuario: ", error);
@@ -92,17 +93,8 @@ const initializePassport = () => {
         callbackUrl: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        // console.log("Profile obtenido del usuario de GitHub: ");
-        // console.log(profile);
         try {
-          //Validamos si el user existe en la DB
-          // const user = await userModel.findOne({ email: profile._json.email });
-          const user = await userModel.findOne({
-            $or: [
-              { email: profile._json.email },
-              { username: profile._json.login },
-            ],
-          });
+          const user = await userRepo.getUserByEmailOrUsername(profile._json.email, profile._json.login);
           if (!user) {
             let newUser = {
               username: profile._json.login,
@@ -111,7 +103,7 @@ const initializePassport = () => {
               loggedBy: "GitHub",
               type: "user",
             };
-            const result = await userModel.create(newUser);
+            const result = await userRepo.createUser(newUser);
             return done(null, result);
           } else {
             // Si entramos por aca significa que el user ya existe en la DB

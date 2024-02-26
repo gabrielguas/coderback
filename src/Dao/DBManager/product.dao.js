@@ -6,7 +6,9 @@ class ProductDao {
   async getAllProducts() {
     return await ProductModel.find();
   }
-  // Esto está bien hacerlo acá, o debería hacerlo en product.router para delegar responsabilidades???
+
+  // Obtener todos los productos paginados
+
   async getAllProductsPaginate(req) {
     const { page, limit, query, sort } = req.query;
     let filter = {};
@@ -61,17 +63,4 @@ class ProductDao {
   }
 }
 
-export default new ProductDao();
-
-// const response = {
-//   status: "success",
-//   payload: products.docs,
-//   totalPages: products.totalPages,
-//   prevPage: products.prevPage,
-//   nextPage: products.nextPage,
-//   page: products.page,
-//   hasPrevPage: products.hasPrevPage,
-//   hasNextPage: products.hasNextPage,
-//   prevLink: products.hasPrevPage ? `/api/products?page=${products.prevPage}` : null,
-//   nextLink: products.hasNextPage ? `/api/products?page=${products.nextPage}` : null
-// };
+export default ProductDao; // Exportar la clase ProductDao, no una instancia de ella
