@@ -31,7 +31,7 @@ const sessionController = {
       });
     });
   },
-
+ 
   githubLogin: async (req, res) => {
     passport.authenticate('github', { scope: ['user:email'] })(req, res);
   },
@@ -59,10 +59,7 @@ const sessionController = {
         });
       } else {
         console.log(req.session);
-        res.json({
-          success: true,
-          msg: "Sesión cerrada correctamente",
-        });
+        res.redirect("/");
       }
     });
   },

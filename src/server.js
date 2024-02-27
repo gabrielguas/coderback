@@ -13,11 +13,16 @@ import initializePassport from "./config/passport.config.js";
 import { configEnv } from "./config/config.js";
 import MongoSingleton from "./config/mongodb-singleton.js";
 import sessionConfig from "./config/sessionConfig.js";
+import viewRouterAdmin from "./routes/admin.views.router.js";
 const app = express();
-
+// Registro del helper "eq"
+Handlebars.registerHelper("eq", function (a, b, options) {
+  return a === b ? options.fn(this) : options.inverse(this);
+});
 //JSON settings
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Engine
 app.engine(
@@ -55,6 +60,7 @@ app.use(passport.session());
 // Views
 app.use("/", viewRouter);
 app.use('/users', viewRoutesUsers);
+app.use('/admin', viewRouterAdmin);
 app.use("/github", githubLoginViewRouter);
 
 // API

@@ -1,0 +1,58 @@
+<!-- adminIndex.hbs -->
+<div class="container">
+  <h1 class="mt-4 mb-4">Panel de Administrador</h1>
+
+  <h2 class="mt-4 mb-4">Lista de Productos</h2>
+
+  {{#each products}}
+    <div class="product card mb-4">
+      <div class="card-body">
+        <h2 class="card-title">{{title}}</h2>
+        <p class="card-text">{{description}}</p>
+        <p class="card-text">Precio: ${{price}}</p>
+        <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
+        <button onclick="eliminarProducto('{{_id}}')" class="btn btn-danger">Eliminar Producto</button>
+        <!-- Agrega más botones o enlaces para editar o actualizar el producto -->
+      </div>
+    </div>
+  {{/each}}
+
+  <!-- Botón para agregar un nuevo producto -->
+  <button onclick="mostrarFormularioAgregar()" class="btn btn-success">Agregar Nuevo Producto</button>
+
+</div>
+
+<!-- Formulario para agregar un nuevo producto (oculto por defecto) -->
+<div id="formularioAgregar" style="display: none;" class="container mt-4">
+  <h2>Agregar Nuevo Producto</h2>
+  <form id="formAgregarProducto" action="/api/products/add" method="POST">
+    <!-- Campos para el nuevo producto (título, descripción, precio, etc.) -->
+    <input type="text" name="title" placeholder="Título">
+    <input type="text" name="description" placeholder="Descripción">
+    <input type="number" name="price" placeholder="Precio">
+    <button type="submit" class="btn btn-primary">Agregar Producto</button>
+  </form>
+</div>
+
+<script>
+  async function eliminarProducto(productId) {
+    try {
+      const response = await fetch(`/api/products/delete/${productId}`, {
+        method: 'POST',
+      });
+      if (response.ok) {
+        alert('Producto eliminado exitosamente.');
+        // Recargar la página o actualizar la lista de productos
+      } else {
+        alert('Hubo un problema al eliminar el producto.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error);
+      alert('Error al eliminar el producto.');
+    }
+  }
+
+  function mostrarFormularioAgregar() {
+    document.getElementById('formularioAgregar').style.display = 'block';
+  }
+</script>
