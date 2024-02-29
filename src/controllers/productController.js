@@ -37,6 +37,16 @@ const productController = {
       res.status(500).json({ error: "Error al buscar el producto por ID" });
     }
   },
+  getProductByIdFunction: async (productId) => {
+    try {
+      const product = await productRepository.getProductById(productId);
+      return product;
+    } catch (error) {
+      console.log("Error al buscar el producto por ID");
+      console.log(error);
+      throw new Error("Error al buscar el producto por ID");
+    }
+  },
 
   updateProduct: async (req, res) => {
     const { ID } = req.params;
