@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="chat-container">
+        <a href="/" class="btn btn-primary">Volver</a> <!-- Botón para ir al chat -->
+        <h2>Chat</h2>
+        <div id="chat-mensajes">
+            <!-- Aquí se mostrarán los mensajes del chat -->
+        </div>
+        <input type="text" id="mensajeInput" placeholder="Escribe tu mensaje">
+        <button onclick="enviarMensaje()">Enviar</button>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Conectar al servidor de websocket
+    const socket = io();
+
+    function enviarMensaje() {
+        const mensaje = document.getElementById('mensajeInput').value;
+        socket.emit('mensaje', mensaje); // Enviar mensaje al servidor
+        document.getElementById('mensajeInput').value = ''; // Limpiar el input después de enviar el mensaje
+    }
+
+    // Manejar la recepción de mensajes del servidor
+    socket.on('respuesta', (mensaje) => {
+        const mensajesContainer = document.getElementById('chat-mensajes');
+        const mensajeElement = document.createElement('div');
+        mensajeElement.classList.add('mensaje');
+        mensajeElement.innerHTML = `<span class="usuario">Servidor:</span> <span class="mensaje-recibido">${mensaje}</span>`;
+        mensajesContainer.appendChild(mensajeElement);
+    });
+</script>

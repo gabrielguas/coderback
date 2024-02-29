@@ -1,52 +1,70 @@
 <div class="container">
   {{#if user}}
-    <div class="user-info mb-4">
-      <h3>¡Bienvenido, {{user.name}}!</h3>
+  <div class="row align-items-center mb-4">
+    <div class="col">
+      <h3 class="mb-3">¡Bienvenido, {{user.name}}!</h3>
       {{#if user.email}}
-        <p>Email: {{user.email}}</p>
+      <p>Email: {{user.email}}</p>
       {{/if}}
       {{#if user.age}}
-        <p>Edad: {{user.age}}</p>
+      <p>Edad: {{user.age}}</p>
       {{/if}}
       {{#if user.rol}}
-        <p>Rol: {{user.rol}}</p>
+      <p>Rol: {{user.rol}}</p>
       {{/if}}
       <p>ID: {{user._id}}</p>
+    </div>
+    <div class="col text-end">
+      <a href="/users/chat" class="btn btn-primary">Ir al chat</a>
       <form action="/api/session/logout">
         <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
       </form>
     </div>
-    <a href="/users/{{user._id}}/cart" class="btn btn-primary">Ir al carrito</a> <!-- Botón para ir al carrito -->
+  </div>
+  <a href="/users/{{user._id}}/cart" class="btn btn-primary mb-4">Ir al carrito</a>
   {{else}}
-    <div class="user-info mb-4">
-      <h3>Bienvenido</h3>
-      <a href="/users/login" class="btn btn-primary">Iniciar Sesión</a>
-    </div>
+  <div class="text-center mb-4">
+    <h3>Bienvenido</h3>
+    <h4 class="mb-3">Debes iniciar sesión para empezar a comprar!</h4>
+    <a href="/users/login" class="btn btn-primary">Iniciar Sesión</a>
+  </div>
   {{/if}}
 
   <h1 class="mt-4 mb-4">Lista de Productos</h1>
 
-  {{#each products}}
-    <div class="product card mb-4">
-      <div class="card-body">
-        <h2 class="card-title">{{title}}</h2>
-        <p class="card-text">{{description}}</p>
-        <p class="card-text">Precio: ${{price}}</p>
-        <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
-        <button onclick="agregarAlCarrito('{{_id}}', {{userId}})" class="btn btn-success">Agregar al carrito</button>
+  <div class="row">
+    {{#each products.docs}}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">{{title}}</h2>
+          <p class="card-text">{{description}}</p>
+          <p class="card-text">Precio: ${{price}}</p>
+          <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
+          {{#if ../user}}
+          <button onclick="agregarAlCarrito('{{_id}}', {{user._id}})" class="btn btn-success">Agregar al carrito</button>
+          {{/if}}
+        </div>
       </div>
     </div>
-  {{/each}}
+    {{/each}}
+  </div>
 
-  {{#if products.hasNextPage}}
-    <a href="?page={{products.nextPage}}{{#if products.query}}&query={{products.query}}{{/if}}{{#if products.sort}}&sort={{products.sort}}{{/if}}" class="btn btn-secondary">Siguiente</a>
-  {{/if}}
-
-  {{#if products.hasPrevPage}}
-    <a href="?page={{products.prevPage}}{{#if products.query}}&query={{products.query}}{{/if}}{{#if products.sort}}&sort={{products.sort}}{{/if}}" class="btn btn-secondary">Anterior</a>
-  {{/if}}
+  <div class="row">
+    <div class="col">
+      {{#if products.hasNextPage}}
+      <a href="?page={{products.nextPage}}{{#if products.query}}&query={{products.query}}{{/if}}{{#if products.sort}}&sort={{products.sort}}{{/if}}"
+        class="btn btn-secondary float-start">Siguiente</a>
+      {{/if}}
+    </div>
+    <div class="col">
+      {{#if products.hasPrevPage}}
+      <a href="?page={{products.prevPage}}{{#if products.query}}&query={{products.query}}{{/if}}{{#if products.sort}}&sort={{products.sort}}{{/if}}"
+        class="btn btn-secondary float-end">Anterior</a>
+      {{/if}}
+    </div>
+  </div>
 </div>
-
 <script>
   async function agregarAlCarrito(productId, userId) {
     try {

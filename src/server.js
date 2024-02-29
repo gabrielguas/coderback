@@ -14,11 +14,16 @@ import { configEnv } from "./config/config.js";
 import MongoSingleton from "./config/mongodb-singleton.js";
 import sessionConfig from "./config/sessionConfig.js";
 import viewRouterAdmin from "./routes/admin.views.router.js";
+import http from 'http';
+import { Server as SocketServer } from 'socket.io';
+import productRouter from "./routes/product.router.js";
+
+
+
 const app = express();
-// Registro del helper "eq"
-Handlebars.registerHelper("eq", function (a, b, options) {
-  return a === b ? options.fn(this) : options.inverse(this);
-});
+const httpServer = http.createServer(app);
+const socketServer = new SocketServer(httpServer);
+
 //JSON settings
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,7 +62,7 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Views
+// Views 
 app.use("/", viewRouter);
 app.use('/users', viewRoutesUsers);
 app.use('/admin', viewRouterAdmin);
@@ -66,18 +71,32 @@ app.use("/github", githubLoginViewRouter);
 // API
 app.use("/api/session", sessionRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/products",productRouter)
 
-app.listen(configEnv.PORT, () => {
+httpServer.listen(configEnv.PORT, () => {
   console.log(`Servidor escuchando en el puerto ${configEnv.PORT}`);
 });
 
 
+// Manejar conexiones de websocket
+socketServer.on('connection', (socket) => {
+  console.log('Cliente conectado');
+
+  // Manejar mensajes del cliente
+  socket.on('mensaje', (mensaje) => {
+    console.log('Mensaje recibido:', mensaje);
+
+    // Enviar una respuesta al cliente
+    socket.emit('respuesta', 'Hemos recibido su consulta, nos comunicaremos a la brevedad');
+  });
+});
+
 // Levantamos instancia Mongo
 const mongoInstance = async () => {
   try {
-      await MongoSingleton.getInstance()
+    await MongoSingleton.getInstance()
   } catch (error) {
-      console.error(error);
+    console.error(error);
   }
 }
 mongoInstance();

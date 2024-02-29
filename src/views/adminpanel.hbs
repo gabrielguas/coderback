@@ -1,7 +1,9 @@
 <!-- adminIndex.hbs -->
 <div class="container">
   <h1 class="mt-4 mb-4">Panel de Administrador</h1>
-
+ <form action="/api/session/logout">
+        <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+      </form>
   <h2 class="mt-4 mb-4">Lista de Productos</h2>
 
   {{#each products}}
@@ -37,8 +39,9 @@
 <script>
   async function eliminarProducto(productId) {
     try {
-      const response = await fetch(`/api/products/delete/${productId}`, {
-        method: 'POST',
+      console.log("Producto: ",productId);
+      const response = await fetch(`/api/products/${productId}`, {
+        method: 'DELETE',
       });
       if (response.ok) {
         alert('Producto eliminado exitosamente.');

@@ -9,7 +9,7 @@ class ProductDao {
 
   // Obtener todos los productos paginados
 
-  async getAllProductsPaginate(req) {
+  async getAllProductsPaginate(req,res) {
     const { page, limit, query, sort } = req.query;
     let filter = {};
     let sortOption = {};
@@ -33,7 +33,7 @@ class ProductDao {
 
     return await ProductModel.paginate(filter, {
       page: page || 1,
-      limit: limit || 10,
+      limit: limit || 5,
       sort: sortOption,
     });
   }

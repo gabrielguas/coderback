@@ -5,7 +5,7 @@ const productRepository = new ProductRepository();
 const productController = {
   getAllProducts: async (req, res) => {
     try {
-      const products = await productRepository.getAllProducts();
+      const products = await productRepository.getAllProductsPaginate(req,res);
       return (products)
     } catch (error) {
       console.error("Error al obtener todos los productos:", error);

@@ -39,8 +39,14 @@ const userController = {
       console.error("Error al obtener el carrito del usuario:", error);
       res.status(500).send("Error interno del servidor");
     }
+  },
+  showChatPage: (req, res) => {
+    if (!req.session.user) {
+      res.redirect("/login");
+      return;
+    }
+    res.render("chat", { user: req.session.user });
   }
-
 };
 
 export default userController;

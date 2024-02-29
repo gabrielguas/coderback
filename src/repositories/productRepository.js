@@ -13,9 +13,9 @@ class ProductRepository {
     }
   }
 
-  async getAllProductsPaginate(req) {
+  async getAllProductsPaginate(req,res) {
     try {
-      return await this.productDAO.getAllProductsPaginate(req);
+      return await this.productDAO.getAllProductsPaginate(req,res);
     } catch (error) {
       throw error;
     }
@@ -47,6 +47,7 @@ class ProductRepository {
 
   async deleteProduct(id) {
     try {
+      console.log("Producto eliminado");
       return await this.productDAO.deleteProduct(id);
     } catch (error) {
       throw error;
