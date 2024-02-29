@@ -21,4 +21,6 @@ export const configEnv = {
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
   GITHUB_SECRET: process.env.GITHUB_SECRET,
   GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
+  USER_MAILER: process.env.USER_MAILER,
+  PASS_MAILER: process.env.PASS_MAILER
 };

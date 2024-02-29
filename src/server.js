@@ -17,7 +17,7 @@ import viewRouterAdmin from "./routes/admin.views.router.js";
 import http from 'http';
 import { Server as SocketServer } from 'socket.io';
 import productRouter from "./routes/product.router.js";
-
+import { checkConnection } from "./config/mailer.config.js";
 
 
 const app = express();
@@ -99,4 +99,8 @@ const mongoInstance = async () => {
     console.error(error);
   }
 }
+
+// Valido la conexión con el servicio de mail
+
+checkConnection
 mongoInstance();
