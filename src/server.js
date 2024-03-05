@@ -8,6 +8,7 @@ import viewRoutesUsers from './routes/users.views.router.js'
 import githubLoginViewRouter from "./routes/github-views.router.js"
 import sessionRouter from "./routes/session.router.js"
 import cartRouter from "./routes/cart.router.js"
+import { getProducts } from "./controllers/mockingProductsController.js"
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { configEnv } from "./config/config.js";
@@ -67,11 +68,13 @@ app.use("/", viewRouter);
 app.use('/users', viewRoutesUsers);
 app.use('/admin', viewRouterAdmin);
 app.use("/github", githubLoginViewRouter);
+app.use("/mockingproducts", getProducts) // Lo hago lo más sencillo, al ser sólo muestra supongo que no va a ser necesario para el final
 
 // API
 app.use("/api/session", sessionRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/products",productRouter)
+
 
 httpServer.listen(configEnv.PORT, () => {
   console.log(`Servidor escuchando en el puerto ${configEnv.PORT}`);
