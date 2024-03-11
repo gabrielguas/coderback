@@ -19,8 +19,7 @@ import http from 'http';
 import { Server as SocketServer } from 'socket.io';
 import productRouter from "./routes/product.router.js";
 import { checkConnection } from "./config/mailer.config.js";
-
-
+import loggerController from './controllers/loggerController.js'
 const app = express();
 const httpServer = http.createServer(app);
 const socketServer = new SocketServer(httpServer);
@@ -68,7 +67,8 @@ app.use("/", viewRouter);
 app.use('/users', viewRoutesUsers);
 app.use('/admin', viewRouterAdmin);
 app.use("/github", githubLoginViewRouter);
-app.use("/mockingproducts", getProducts) // Lo hago lo más sencillo, al ser sólo muestra supongo que no va a ser necesario para el final
+app.use("/mockingproducts", getProducts); // Lo hago lo más sencillo, al ser sólo muestra supongo que no va a ser necesario para el final
+app.use("/loggerTest", loggerController);
 
 // API
 app.use("/api/session", sessionRouter);
