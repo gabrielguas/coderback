@@ -67,6 +67,7 @@ app.use("/users", viewRoutesUsers);
 app.use("/admin", viewRouterAdmin);
 app.use("/github", githubLoginViewRouter);
 app.use("/mockingproducts", getProducts); // Lo hago lo más sencillo, al ser sólo muestra supongo que no va a ser necesario para el final
+app.use("/email", emailRouter);
 
 // API
 app.use("/api/session", sessionRouter);

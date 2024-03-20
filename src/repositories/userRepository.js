@@ -1,4 +1,5 @@
 import UserDAO from "../Dao/DBManager/user.dao.js"; // Importa el DAO de usuario
+import { createHash } from "../utils.js"
 
 class UserRepository {
   constructor() {
@@ -49,6 +50,17 @@ class UserRepository {
     try {
       return await this.userDAO.getUserByEmailOrUsername(email, username);
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePassword(userId, newPassword) {
+    try {
+      const hashedPassword = createHash(newPassword);
+      // Actualiza la contraseña del usuario en la base de datos utilizando el método updateUser del DAO de usuario
+      return await this.userDAO.updateUser(userId, { password: hashedPassword  });
+    } catch (error) {
+      // Maneja cualquier error que pueda ocurrir durante la actualización de la contraseña
       throw error;
     }
   }

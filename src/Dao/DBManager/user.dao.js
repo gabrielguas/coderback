@@ -58,6 +58,7 @@ class UserDAO {
       throw error;
     }
   }
+  
 }
 
 export default UserDAO;
