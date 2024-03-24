@@ -3,14 +3,23 @@ import passport from "passport";
 
 const sessionController = {
   registerUser: async (req, res) => {
-    passport.authenticate("register", {
-      failureRedirect: "/api/session/fail-register",
-    })(req, res, () => {
-      console.log("Registrando usuario: ");
-      res
+    passport.authenticate("register", (err, user, info) => {
+      if (err) {
+        console.error("Error durante el registro:", err);
+        return res
+          .status(500)
+          .send({ status: "error", message: "Error durante el registro" });
+      }
+      if (!user) {
+        // No se creó el usuario debido a que ya existe un usuario con ese correo electrónico
+        return res.status(400).send({ status: "error", message: info.message });
+      }
+      // Usuario creado con éxito
+      console.log("Usuario creado con éxito!");
+      return res
         .status(201)
         .send({ status: "success", message: "Usuario creado con éxito!" });
-    });
+    })(req, res);
   },
 
   loginUser: async (req, res) => {

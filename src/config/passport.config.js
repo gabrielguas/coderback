@@ -2,10 +2,10 @@ import passport from "passport";
 import passportLocal from "passport-local";
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
-import { configEnv } from "../config/config.js"
+import { configEnv } from "../config/config.js";
 import UserRepository from "../repositories/userRepository.js";
 
-const { GITHUB_CLIENT_ID, GITHUB_SECRET,GITHUB_CALLBACK_URL } = configEnv;
+const { GITHUB_CLIENT_ID, GITHUB_SECRET, GITHUB_CALLBACK_URL } = configEnv;
 // Declaro la estrategia
 const localStrategy = passportLocal.Strategy;
 
@@ -22,7 +22,9 @@ const initializePassport = () => {
           const exist = await userRepo.getUserByEmail(email);
           if (exist) {
             console.log("Ya hay un usuario registrado con ese email");
-            done(null, false);
+            return done(null, false, {
+              message: "Ya hay un usuario registrado con ese email",
+            });
           }
 
           const result = await userRepo.createUser({
@@ -33,13 +35,10 @@ const initializePassport = () => {
             password: createHash(password),
             rol,
           });
-          res.send({
-            status: "success",
-            message: "Usuario creado con éxito, ID: " + result._id,
-          });
           return done(null, result);
         } catch (error) {
-          return done("Error registrando al usuario: " + error);
+          console.error("Error registrando al usuario:", error);
+          return done(error); // Devuelve el error al middleware de Passport
         }
       }
     )
@@ -94,7 +93,10 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          const user = await userRepo.getUserByEmailOrUsername(profile._json.email, profile._json.login);
+          const user = await userRepo.getUserByEmailOrUsername(
+            profile._json.email,
+            profile._json.login
+          );
           if (!user) {
             let newUser = {
               username: profile._json.login,
