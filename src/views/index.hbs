@@ -22,6 +22,11 @@
     </div>
   </div>
   <a href="/users/{{user._id}}/cart" class="btn btn-primary mb-4">Ir al carrito</a>
+  <script>
+    if ("{{user.rol}}" === "premium") {
+      document.write('<a href="/users/agregarproduct/premium" class="btn btn-warning mb-4">Agregar Producto (Premium)</a>');
+    }
+  </script>
   {{else}}
   <div class="text-center mb-4">
     <h3>Bienvenido</h3>
@@ -32,23 +37,39 @@
 
   <h1 class="mt-4 mb-4">Lista de Productos</h1>
 
-  <div class="row">
-    {{#each products.docs}}
-    <div class="col-md-4 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title">{{title}}</h2>
-          <p class="card-text">{{description}}</p>
-          <p class="card-text">Precio: ${{price}}</p>
-          <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
-          {{#if ../user}}
-          <button onclick="agregarAlCarrito('{{_id}}', {{user._id}})" class="btn btn-success">Agregar al carrito</button>
-          {{/if}}
-        </div>
+<div class="row">
+  {{#each products.docs}}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">{{title}}</h2>
+        <p class="card-text">{{description}}</p>
+        <p class="card-text">Precio: ${{price}}</p>
+        <a href="/api/products/detalle/{{_id}}" class="btn btn-primary">Ver más</a>
+        {{#if ../user}}
+        <button onclick="agregarAlCarrito('{{_id}}', '{{../user._id}}')" class="btn btn-success">Agregar al carrito</button>
+        {{/if}}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const ownerId = "{{owner}}";
+            const userId = "{{../user._id}}";
+            if (ownerId === userId) {
+              const button = document.createElement('button');
+              button.textContent = 'Borrar';
+              button.classList.add('btn', 'btn-danger');
+              button.addEventListener('click', function () {
+                borrarProducto("{{_id}}", userId);
+              });
+              document.querySelector('.card-body').appendChild(button);
+            }
+          });
+        </script>
       </div>
     </div>
-    {{/each}}
   </div>
+  {{/each}}
+</div>
+
 
   <div class="row">
     <div class="col">
@@ -68,6 +89,17 @@
 <script>
   async function agregarAlCarrito(productId, userId) {
     try {
+         // Obtener información del producto
+    const responseProduct = await fetch(`/api/products/${productId}`);
+    const productData = await responseProduct.json();
+    console.log("Datos: ",productData.owner);
+    console.log("productID: ",productId);
+    console.log("UserId: ", userId)
+    // Verificar si el owner del producto es igual al userId
+    if (productData.owner === userId) {
+      alert('No puedes agregar un producto que te pertenece al carrito.');
+      return;
+    }
       const response = await fetch(`/api/cart/${userId}/products/${productId}`, {
         method: 'POST',
         headers: {
@@ -82,6 +114,27 @@
     } catch (error) {
       console.error('Error al agregar el producto al carrito:', error);
       alert('Error al agregar el producto al carrito.');
+    }
+  }
+
+    async function borrarProducto(productId, userId) {
+    try {
+      const response = await fetch(`/api/products/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userId }) // validar datos
+      });
+      if (response.ok) {
+        alert('Producto borrado exitosamente.');
+        // Puedes recargar la página o actualizar la lista de productos aquí si lo deseas
+      } else {
+        alert('Hubo un problema al borrar el producto.');
+      }
+    } catch (error) {
+      console.error('Error al borrar el producto:', error);
+      alert('Error al borrar el producto.');
     }
   }
 </script>

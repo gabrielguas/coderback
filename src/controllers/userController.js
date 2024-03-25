@@ -50,6 +50,10 @@ const userController = {
   },
 
 
+  showAddProduct: (req, res) => {
+    const userId = req.session.user._id;
+    res.render('agregar-producto-premium', { userId });
+  },
 
 
 
@@ -90,6 +94,7 @@ const userController = {
       res.status(500).send("Error interno del servidor");
     }
   }
+
 }
 
 export default userController;

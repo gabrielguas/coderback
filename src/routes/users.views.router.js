@@ -9,5 +9,6 @@ router.get('/login', userController.showLoginPage);
 router.get('/register', userController.showRegisterPage);
 router.get('/chat',hasPermissions("usuario"), userController.showChatPage);
 router.get('/',hasPermissions("usuario"), userController.showProfilePage);
-router.get('/:userId/cart',hasPermissions("usuario"), userController.showCartPage);
+router.get('/:userId/cart', hasPermissions("usuario", "premium"), userController.showCartPage);
+router.get('/agregarproduct/premium', hasPermissions("premium"), userController.showAddProduct);
 export default router;
