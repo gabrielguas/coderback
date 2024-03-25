@@ -1,5 +1,4 @@
 const form = document.getElementById("loginForm");
-console.log("!!!!!!!!!");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -16,6 +15,8 @@ form.addEventListener("submit", (e) => {
   }).then((result) => {
     if (result.status === 200) {
       window.location.replace("/");
+    } else {
+      alert("Usuario o contraseña invalido")
     }
   });
 });

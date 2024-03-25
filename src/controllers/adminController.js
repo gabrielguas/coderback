@@ -9,7 +9,7 @@ const adminController = {
       const products = await productRepository.getAllProducts();
       res.render('adminpanel', { products });
     } catch (error) {
-      console.error("Error al obtener productos:", error);
+     // console.error("Error al obtener productos:", error);
       res.status(500).send("Error interno del servidor");
     }
   },
@@ -20,7 +20,7 @@ const adminController = {
       await productRepository.createProduct(newProduct);
       res.redirect('/admin/panel');
     } catch (error) {
-      console.error("Error al agregar producto:", error);
+    //  console.error("Error al agregar producto:", error);
       res.status(500).send("Error interno del servidor");
     }
   },
@@ -32,7 +32,7 @@ const adminController = {
       await productRepository.updateProduct(productId, updatedProduct);
       res.redirect('/admin/panel');
     } catch (error) {
-      console.error("Error al editar producto:", error);
+     // console.error("Error al editar producto:", error);
       res.status(500).send("Error interno del servidor");
     }
   },
@@ -43,7 +43,7 @@ const adminController = {
       await productRepository.deleteProduct(productId);
       res.redirect('/admin/panel');
     } catch (error) {
-      console.error("Error al eliminar producto:", error);
+     // console.error("Error al eliminar producto:", error);
       res.status(500).send("Error interno del servidor");
     }
   }

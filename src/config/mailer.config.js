@@ -15,7 +15,6 @@ const transporter = nodemailer.createTransport({
 // Verificamos conexion con gmail
 const checkConnection = transporter.verify(function (error, success) {
   if (error) {
-    console.log(error);
     console.log(
       "No se ha podido establecer la conexión con el servidor de correo"
     );
@@ -88,7 +87,6 @@ const resetPassword = (req, res) => {
 
   if (now > expirationTime || !expirationTime) {
     delete tempDBmails[token];
-    console.log("El tiempo de expiración ha completado");
     return res.redirect("/send-email-to-reset");
   }
   //Podes hacer que renderice un html sencillo y le pida ingresar contraseña y haga los metodos para actualizar de abajo dentro de acá?
@@ -99,7 +97,6 @@ const resetPassword = (req, res) => {
 const updatePassword = async (req, res) => {
   const token = req.params.token; // Obtener el token del cuerpo de la solicitud
   const emailInfo = tempDBmails[token];
-  console.log(token);
   if (!emailInfo) {
     return res
       .status(404)
@@ -117,7 +114,6 @@ const updatePassword = async (req, res) => {
   try {
     const userRepository = new UserRepository();
     // Obtén el usuario por su correo electrónico
-    console.log("ESTE ES EL EMAIL:", email);
     const user = await userRepository.getUserByEmail(email);
 
     if (!user) {

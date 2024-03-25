@@ -21,7 +21,7 @@ const initializePassport = () => {
         try {
           const exist = await userRepo.getUserByEmail(email);
           if (exist) {
-            console.log("Ya hay un usuario registrado con ese email");
+            ("Ya hay un usuario registrado con ese email");
             return done(null, false, {
               message: "Ya hay un usuario registrado con ese email",
             });

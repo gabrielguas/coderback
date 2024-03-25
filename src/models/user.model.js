@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cartModel from "./cart.model.js" // Asegúrate de importar el modelo de carrito
 
 const collection = "users";
-const validRoles = ["usuario", "admin"];
+const validRoles = ["usuario", "admin", "premium"];
 
 const schema = new mongoose.Schema({
   first_name: String,

@@ -26,9 +26,7 @@ const sessionController = {
     passport.authenticate("login", {
       failureRedirect: "/api/session/fail-login",
     })(req, res, () => {
-      console.log("Usuario encontrado para el login: ");
       const user = req.user;
-      console.log(user);
 
       req.session.user = {
         _id: user._id,
@@ -76,7 +74,6 @@ const sessionController = {
           msg: "Error al cerrar la sesión",
         });
       } else {
-        console.log(req.session);
         res.redirect("/");
       }
     });

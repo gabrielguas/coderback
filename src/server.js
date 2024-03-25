@@ -20,7 +20,7 @@ import { Server as SocketServer } from "socket.io";
 import productRouter from "./routes/product.router.js";
 import { checkConnection } from "./config/mailer.config.js";
 import emailRouter from "./routes/email.router.js";
-
+import userRouter from "./routes/users.router.js"
 const app = express();
 const httpServer = http.createServer(app);
 const socketServer = new SocketServer(httpServer);
@@ -74,6 +74,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/products", productRouter);
 app.use("/api/email", emailRouter);
+app.use("/api/users", userRouter )
 
 httpServer.listen(configEnv.PORT, () => {
   console.log(`Servidor escuchando en el puerto ${configEnv.PORT}`);
